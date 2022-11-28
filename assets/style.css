@@ -1,0 +1,18 @@
+* {
+    box-sizing: border-box;
+}
+
+
+
+#search-btn {
+    width: 100%;
+    padding: 8px;
+    text-align: center;
+    border-radius: 10px;
+
+}
+
+#city-search {
+    width: 100%;
+    
+}

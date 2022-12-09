@@ -17,7 +17,7 @@ No installation required. Access the application in any browser at https://jerem
 
 - Your results will appear on the right with a large display of the current day's weather and the 5-day forecast on smaller cards below. Previously searched locations will appear below the search form and can be clicked on to review the previously searched location's updated forecast.
 
-![Search Result](assets/images/screenshot.png)
+![Search Result](./assets/images/search-results.png)
 
 
 ## Credits

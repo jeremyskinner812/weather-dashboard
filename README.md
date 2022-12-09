@@ -22,7 +22,7 @@ No installation required. Access the application in any browser at https://jerem
 
 ## Credits
 
-Days.js plugin
-Bootstrap CSS Framework
-Open Weather Map API
+- Days.js plugin
+- Bootstrap CSS Framework
+- Open Weather Map API
 

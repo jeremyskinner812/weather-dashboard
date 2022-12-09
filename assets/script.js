@@ -3,9 +3,44 @@ var searchButton = document.getElementById("search-btn");
 var citySearchInput = document.getElementById("city-search");
 var todaysWeather = document.getElementById("todays");
 var futureDays = document.getElementById("future-days");
+var searchHistoryContainer = document.getElementById("search-history");
+var searchHistory = [];
+// global variables
 
+// function to render history buttons
+function renderHistory() {
+  searchHistoryContainer.innerHTML = "";
 
+  for(var i = 0; i < searchHistory.length; i++){
+    var historyButton = document.createElement("button");
+    historyButton.setAttribute("data-history", searchHistory[i]);
+    historyButton.setAttribute("class", "btn btn-secondary history-btn m-2");
+    historyButton.textContent = searchHistory[i];
+    historyButton.setAttribute("type", "button");
+    searchHistoryContainer.append(historyButton);
+  }
+};
 
+// function to add searches to local storage
+function addToHistory(search) {
+  if(searchHistory.indexOf(search) !== -1) {
+    return; }
+  searchHistory.push(search);
+  localStorage.setItem("search-history", JSON.stringify(searchHistory));
+  renderHistory();
+};
+
+// function to get history from local storage
+function getHistory() {
+  var storedItems = localStorage.getItem("search-history");
+  if (storedItems) {
+    searchHistory = JSON.parse(storedItems);
+    renderHistory();
+  }
+};
+ 
+
+// function to render current weather
 function renderTodays(city, weather){
     var date = dayjs().format("M/D/YYYY");
     var temp = weather.main.temp;
@@ -22,6 +57,8 @@ function renderTodays(city, weather){
     var windEl = document.createElement("p");
     var humidEl = document.createElement("p");
 
+    todaysWeather.innerHTML = "";
+
     container.append(card);
 
     card.setAttribute("style", "border: solid black 3px");
@@ -37,12 +74,12 @@ function renderTodays(city, weather){
 
 }
 
+// function to render 5 day forecast
 function renderFutureCard(forecast) {
   var temp = forecast.main.temp;
   var wind = forecast.wind.speed;
   var humid = forecast.main.humidity;
   var iconUrl = `https://openweathermap.org/img/w/${forecast.weather[0].icon}.png`;
-  // var iconAbout = weather.weather[0].description || weather[0].main;
 
   var column = document.createElement("div");
   var card = document.createElement("div");
@@ -52,11 +89,11 @@ function renderFutureCard(forecast) {
   var tempEl = document.createElement("p");
   var windEl = document.createElement("p");
   var humidEl = document.createElement("p");
-
+// creating elements for cards
   column.append(card);
   card.append(cardContent);
   cardContent.append(headEl, iconEl, tempEl, windEl, humidEl );
-
+// setting values and appending cards to page
   column.setAttribute("class", "col-md-2");
   card.setAttribute("class", "card bg-secondary forecast-card");
   headEl.textContent = dayjs(forecast.dt_txt).format("M/D/YYYY");
@@ -69,7 +106,7 @@ function renderFutureCard(forecast) {
 
 }
 
-
+// function to add header and loop through data to render 5 day forecast
 function renderFiveDay(dailyData) {
   var startPoint = dayjs().add(1, 'day').startOf('day').unix();
   var endPoint = dayjs().add(6, 'day').startOf('day').unix();
@@ -102,7 +139,7 @@ function renderWeather(city, data) {
 
 
 
-
+// fetch function to get weather data
 function getWeather(location){
     var lat  = location.lat;
     var lon = location.lon;
@@ -125,7 +162,7 @@ function getWeather(location){
 
 
 
-
+// fetch function to get coordinates of searched city
 function getCoordinates(search) {
     var apiUrl =`https://api.openweathermap.org/geo/1.0/direct?q=${search}&limit=5&appid=e2c5e14da0d6896d30552e334ed3c851`
     
@@ -135,6 +172,7 @@ function getCoordinates(search) {
         })
         .then(function (data) {
             console.log(data[0]);
+            addToHistory(search);
             getWeather(data[0]);
         })
         .catch(function (err) {
@@ -146,7 +184,7 @@ function getCoordinates(search) {
 
 
 
-
+// function to handle search form submission
 function submitSearch (event) {
     if (!citySearchInput.value) {
         return;
@@ -162,5 +200,16 @@ function submitSearch (event) {
 
 };
 
+// function to handle search history button click
+function handleSearchHistory(event) {
+  var historyButton = event.target;
+  var search = historyButton.getAttribute("data-history");
+  getCoordinates(search);
+}
 
+// function call to get search history on page load
+getHistory();
+
+// event listeners
 searchForm.addEventListener("submit", submitSearch);
+searchHistoryContainer.addEventListener("click", handleSearchHistory);

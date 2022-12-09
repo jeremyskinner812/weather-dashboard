@@ -1,9 +1,10 @@
 * {
     box-sizing: border-box;
 }
+/* box sizing for page */
 
 
-
+/* search button */
 #search-btn {
     width: 100%;
     padding: 8px;
@@ -12,11 +13,30 @@
 
 }
 
+/* text input for search */
 #city-search {
     width: 100%;
+    height: 40px;
+    border-radius: 10px;
     
 }
 
+/* margin for forecast card */
 .forecast-card {
     margin-top: 1 rem;
+}
+
+/* search history buttons */
+.history-btn {
+    width: 100%;
+    padding: 8px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+/* current weather container */
+#todays {
+    max-width: 66%;
+    margin-top: 1rem;
+    
 }
